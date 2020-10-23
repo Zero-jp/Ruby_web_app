@@ -10,6 +10,27 @@
   <div class="large-12 cell">
     Данные из переменной экземпляра: <%= @some_tests %>
   </div>
+
+  <div class="large-12 cell">
+    <form>
+      <div class="grid-x grid-padding-x">
+        <div class="large-6 cell">
+          <label>Дата теста
+            <input type="text" placeholder="2020-04-25">
+          </label>
+        </div>
+        <div class="large-6 cell">
+          <label>Описание
+            <input type="text" placeholder="Проверка">
+          </label>
+        </div>
+        <div class="lareg-12 cell">
+          <input type="submit" value="Фильтровать" class="button">
+        </div>
+      </div>
+    </form>
+  </div>
+
   <div class="large-12 cell">
     <table>
       <thead>
