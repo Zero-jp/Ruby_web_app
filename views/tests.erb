@@ -1,0 +1,33 @@
+<div class="grid-x grid-padding-x">
+  <div class="large-12 cell">
+    <h3>Список тестов</h3>
+  </div>
+
+  <!-- Capturing data from the app.rb -->
+  <div class="large-12 cell">
+    Данные из локальной переменной: <%= data %>
+  </div>
+  <div class="large-12 cell">
+    Данные из переменной экземпляра: <%= @some_tests %>
+  </div>
+  <div class="large-12 cell">
+    <table>
+      <thead>
+        <tr>
+          <th>Название</th>
+          <th>Дата</th>
+          <th>Описание</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @tests.each_tests do |test| %>
+          <tr>
+            <td><%= test.name %></td>
+            <td><%= test.date %></td>
+            <td><%= test.description %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div> 
+</div>
