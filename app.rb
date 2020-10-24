@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'forme'
 require 'roda'
 # Connecting all files in the "models" directory
 require_relative 'models'
@@ -10,6 +11,7 @@ class App < Roda
   opts[:root] = __dir__ # Here it is write that the root of the app is that file
   # Allows you to customize the application depending on the environment in which it was launched
   plugin :environments
+  plugin :forme
   plugin :render
 
   # Development environment only
