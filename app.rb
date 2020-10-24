@@ -35,19 +35,30 @@ class App < Roda
     end
 
     r.on 'tests' do
-      # @some_tests = [1, 2, 15]
-      # Displaying the page template inside the layout
-      # locals - sending data to the template
-      # view('tests', locals: { data: 'Данные из контроллера' })
+        # @some_tests = [1, 2, 15]
+        # Displaying the page template inside the layout
+        # locals - sending data to the template
+        # view('tests', locals: { data: 'Данные из контроллера' })
 
-      @params = InputValidators.chek_date_description(r.params['date'], r.params['description']) # params - hash
-      # Add filter
-      @filtered_tests = if @params[:errors].empty?
-                          @tests.filter(@params[:date], @params[:description])
-                        else
-                          @tests.all_tests
-                        end
-      view('tests')
+        # Adressing dyrectly to 'tests'
+        r.is do
+        @params = InputValidators.chek_date_description(r.params['date'], r.params['description']) # params - hash
+        # Add filter
+        @filtered_tests = if @params[:errors].empty?
+                            @tests.filter(@params[:date], @params[:description])
+                          else
+                            @tests.all_tests
+                          end
+        view('tests')
+        end
+        
+        # Adressing to 'tests/new'
+        r.on 'new' do
+          r.get do
+            view('new_test')
+          end
+        
+        end
     end
   end
 end
