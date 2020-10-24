@@ -19,46 +19,56 @@ class App < Roda
     opts[:serve_static] = true
   end
 
+  # Storage of all test information
+  opts[:tests]= TestList.new([
+    Test.new('Лабораторная работа №1', '2020-04-05', 'Проверка знаний по языку Ruby'),
+    Test.new('Лабораторная работа №2', '2020-04-20', 'Проверка умения написать приложение на языке Ruby'),
+    Test.new('Финальный экзамен', '2020-06-20', 'Проверка всех знаний и умений')
+  ])
+
   route do |r|
     # All requests would be processed
     r.public if opts[:serve_static]
-
-    # Storage of all test information
-    @tests = TestList.new([
-                            Test.new('Лабораторная работа №1', '2020-04-05', 'Проверка знаний по языку Ruby'),
-                            Test.new('Лабораторная работа №2', '2020-04-20', 'Проверка умения написать приложение на языке Ruby'),
-                            Test.new('Финальный экзамен', '2020-06-20', 'Проверка всех знаний и умений')
-                          ])
 
     r.root do
       'Hello, World!'
     end
 
     r.on 'tests' do
-        # @some_tests = [1, 2, 15]
-        # Displaying the page template inside the layout
-        # locals - sending data to the template
-        # view('tests', locals: { data: 'Данные из контроллера' })
+      # @some_tests = [1, 2, 15]
+      # Displaying the page template inside the layout
+      # locals - sending data to the template
+      # view('tests', locals: { data: 'Данные из контроллера' })
 
-        # Adressing dyrectly to 'tests'
-        r.is do
-        @params = InputValidators.chek_date_description(r.params['date'], r.params['description']) # params - hash
+      # Adressing dyrectly to 'tests'
+      r.is do
+        @params = InputValidators.check_date_description(r.params['date'], r.params['description']) # params - hash
         # Add filter
         @filtered_tests = if @params[:errors].empty?
-                            @tests.filter(@params[:date], @params[:description])
+                            opts[:tests].filter(@params[:date], @params[:description])
                           else
-                            @tests.all_tests
+                            opts[:tests].all_tests
                           end
         view('tests')
+      end
+
+      # Adressing to 'tests/new'
+      r.on 'new' do
+        r.get do
+          view('new_test')
         end
-        
-        # Adressing to 'tests/new'
-        r.on 'new' do
-          r.get do
+
+        r.post do
+          @params = InputValidators.check_test(r.params['name'], r.params['date'], r.params['description'])
+          if @params[:errors].empty?
+            # Adding new test
+            opts[:tests].add_test(Test.new(@params[:name], @params[:date], @params[:description]))
+            r.redirect '/tests'
+          else
             view('new_test')
           end
-        
         end
+      end
     end
   end
 end
