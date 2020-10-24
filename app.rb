@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'roda'
-# Connecting all files in the "models" directory.
+# Connecting all files in the "models" directory
 require_relative 'models'
 
 # Core class
@@ -23,22 +23,31 @@ class App < Roda
     # All requests would be processed
     r.public if opts[:serve_static]
 
-      # Storage of all test information.
+    # Storage of all test information
     @tests = TestList.new([
-      Test.new('Лабораторная работа №1', '2020-04-05', 'Проверка знаний по языку Ruby'),
-      Test.new('Лабораторная работа №2', '2020-04-20', 'Проверка умения написать приложение на языке Ruby'),
-      Test.new('Финальный экзамен', '2020-06-20', 'Проверка всех знаний и умений')
-    ])
+                            Test.new('Лабораторная работа №1', '2020-04-05', 'Проверка знаний по языку Ruby'),
+                            Test.new('Лабораторная работа №2', '2020-04-20', 'Проверка умения написать приложение на языке Ruby'),
+                            Test.new('Финальный экзамен', '2020-06-20', 'Проверка всех знаний и умений')
+                          ])
 
     r.root do
       'Hello, World!'
     end
 
     r.on 'tests' do
-      @some_tests = [1, 2, 15]
+      # @some_tests = [1, 2, 15]
       # Displaying the page template inside the layout
       # locals - sending data to the template
-      view('tests', locals: { data: 'Данные из контроллера' })
+      # view('tests', locals: { data: 'Данные из контроллера' })
+
+      @params = InputValidators.chek_date_description(r.params['date'], r.params['description']) # params - hash
+      # Add filter
+      @filtered_tests = if @params[:errors].empty?
+                          @tests.filter(@params[:date], @params[:description])
+                        else
+                          @tests.all_tests
+                        end
+      view('tests')
     end
   end
 end
