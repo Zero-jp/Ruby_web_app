@@ -44,7 +44,7 @@ class App < Roda
 
       # Adressing dyrectly to 'tests'
       r.is do
-        @params = TestFilterFormSchema.call(r.params)
+        @params = DryResultFormeAdapter.new(TestFilterFormSchema.call(r.params))
         # Add filter
         @filtered_tests = if @params.success?
                             opts[:tests].filter(@params[:date], @params[:description])
