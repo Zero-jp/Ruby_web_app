@@ -57,12 +57,13 @@ class App < Roda
       # Adressing to 'tests/new'
       r.on 'new' do
         r.get do
+          @params = {}
           view('new_test')
         end
 
         r.post do
-          @params = InputValidators.check_test(r.params['name'], r.params['date'], r.params['description'])
-          if @params[:errors].empty?
+          @params = DryResultFormeAdapter.new(NewTestForSchema.call(r.params))
+          if @params.success?
             # Adding new test
             opts[:tests].add_test(Test.new(@params[:name], @params[:date], @params[:description]))
             r.redirect '/tests'
