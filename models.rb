@@ -4,3 +4,4 @@
 require_relative 'models/input_validators'
 require_relative 'models/test'
 require_relative 'models/test_list'
+require_relative 'models/test_filter_form_schema'

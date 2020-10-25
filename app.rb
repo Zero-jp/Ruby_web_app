@@ -44,9 +44,9 @@ class App < Roda
 
       # Adressing dyrectly to 'tests'
       r.is do
-        @params = InputValidators.check_date_description(r.params['date'], r.params['description']) # params - hash
+        @params = TestFilterFormSchema.call(r.params)
         # Add filter
-        @filtered_tests = if @params[:errors].empty?
+        @filtered_tests = if @params.success?
                             opts[:tests].filter(@params[:date], @params[:description])
                           else
                             opts[:tests].all_tests
